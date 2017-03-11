@@ -18,7 +18,7 @@ void Draw()
 
 int main() 
 {
-
-
+	Draw();
+	
 
 }
