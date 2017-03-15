@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-width = 10;
+int width = 30;
 
 
 void Draw()
@@ -11,6 +11,8 @@ void Draw()
 	for (int i = 0; i < width; i++)
 		cout << "_";
 	cout << endl;
+	for(int j=0; j < width; j++)
+		cout << "|";
 
 }
 
