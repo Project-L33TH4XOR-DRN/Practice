@@ -51,10 +51,6 @@ void setWeapon(char type)
 			else
 				weaponNumber = 0;
 			break;
-		case 'a':
-		case 'A':
-
-			break;
 		case 'q':
 		case 'Q':
 			inLoop = 0;
