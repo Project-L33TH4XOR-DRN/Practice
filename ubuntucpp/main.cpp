@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <curses.h>
+#include <conio.h>
 #include <string>
 using namespace std;
 
@@ -55,7 +55,7 @@ void setWeapon(string type)
 
 int main()
 {
-	clear;
+	system("cls");
 	string wtype;
 	cout << "Select Weapon Type\n";
 	cin >> wtype;
