@@ -7,9 +7,9 @@
 using namespace std;
 
 int width = 50;
-string top_of_weapon[3];
-string mid_of_weapon[3];
-string bot_of_weapon[3];
+string top_of_weapon;
+string mid_of_weapon;
+string bot_of_weapon;
 
 
 
@@ -34,30 +34,29 @@ void drawChar()
 
 }
 
-void setWeapon(char type[5])
+void setWeapon(string type)
 
 {
-	switch (type[5]){
-	
-		case "staff":
-		case "Staff":
+
+	if (type == "staff" || type == "Staff")
+		{
 			top_of_weapon = "|  ";
 			mid_of_weapon = "|  ";
 			bot_of_weapon = "|  ";
-
-		case "sword":
-		case "Sword":
-			top_of_weapon = "/  ";
+		}	
+	else if (type == "sword" || type == "Sword")
+		{
+			top_of_weapon = " / ";
 			mid_of_weapon = "/  ";
 			bot_of_weapon = "\\  ";
-	}
+		}
 
 }
 
 int main()
 {
 	clear;
-	char wtype[5];
+	string wtype;
 	cout << "Select Weapon Type\n";
 	cin >> wtype;
 	setWeapon(wtype);
