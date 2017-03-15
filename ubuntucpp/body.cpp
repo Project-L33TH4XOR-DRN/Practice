@@ -6,7 +6,7 @@
 using namespace std;
 
 
-int drawChar()
+void drawChar()
 {
 	cout << " _()_   /\n";
 //	myfile.open("weapon.cpp");
@@ -16,6 +16,9 @@ int drawChar()
 
 
 }
+
+
+
 
 
 int main()
