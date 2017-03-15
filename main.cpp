@@ -1,61 +1,87 @@
+
+
 #include <iostream>
 #include <fstream>
 #include <conio.h>
+#include <string>
 using namespace std;
 
-
+int inLoop = 1;
 int width = 50;
-
-
+char charCmd;
+int weaponNumber = 0;
+string top_of_weapon[] = {"", "|  ", "  /", "\\|/"};
+string mid_of_weapon[] = {"", "|  ", " / ", " Y "};
+string bot_of_weapon[] = {"", "|  ", "\\  ", " | "};
+string gnd_of_weapon[] = {"", "|  ", "   ", " | "};
 
 
 void drawFloor()
 {
 
-	system("cls"); //clear terminal screen
-	cout << "\n\n\n\n\n";
-	for (int i = 0; i < width; i++)
-		cout << "_";
-
-	cout << endl;
-	for(int j=0; j < width; j++)
-		cout << "|";
-
-	cout << endl << endl;
-
-	cout << "\n";
-	for (int i = 0; i < width; i++)
-		cout << "_";
-	cout << endl;
+        cout << "\n";
+        for (int i = 0; i < width; i++)
+                cout << "_";
+        cout << endl;
 
 }
 
-int drawChar()
+
+
+void drawChar()
 {
-        cout << " _()_   /\n";
-//      myfile.open("weapon.cpp");
-        cout << " ( ')  /\n";
-        cout << " (  )o\\\n";
-        cout << " (_)_)";
-
+	cout << " _()_ "<< top_of_weapon [weaponNumber] << "\n";
+	cout << " ( ') "<< mid_of_weapon [weaponNumber]<< "\n";
+	cout << " (  )o"<< bot_of_weapon [weaponNumber]<< "\n";
+	cout << " (_)_)"<< gnd_of_weapon [weaponNumber];
 
 }
 
+void setWeapon(char type)
+
+{
+	switch (type)
+	{
+		case 'r':
+		case 'R':
+			if (weaponNumber < 3)
+			{
+				weaponNumber += 1;
+			}
+			else
+				weaponNumber = 0;
+			break;
+		case 'a':
+		case 'A':
+
+			break;
+		case 'q':
+		case 'Q':
+			inLoop = 0;
+			break;
+	
+		default:
+			break;
+	}
+
+}
 
 int main()
 {
-        system("cls");
-        drawChar();
-
-}
-
-
-
-
-
-int main() 
-{
-	Draw();
+	system("cls");
+	cout << "\n\n\n\n\n\n\n";
 	
+	drawChar();
+	drawFloor();
+	while (inLoop == 1)
+	{
+		charCmd = getch();
+		system("cls");
+		setWeapon(charCmd);
+		cout << "\n\n\n\n\n\n\n";
+		drawChar();
+		drawFloor();
+	}
 
+	return 0;
 }

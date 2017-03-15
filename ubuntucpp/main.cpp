@@ -6,11 +6,14 @@
 #include <string>
 using namespace std;
 
+int inLoop = 1;
 int width = 50;
-string top_of_weapon;
-string mid_of_weapon;
-string bot_of_weapon;
-
+char charCmd;
+int weaponNumber = 0;
+string top_of_weapon[] = {"", "|  ", "  /", "\\|/"};
+string mid_of_weapon[] = {"", "|  ", " / ", " Y "};
+string bot_of_weapon[] = {"", "|  ", "\\  ", " | "};
+string gnd_of_weapon[] = {"", "|  ", "   ", " | "};
 
 
 void drawFloor()
@@ -27,41 +30,58 @@ void drawFloor()
 
 void drawChar()
 {
-	cout << " _()_ "<< top_of_weapon << "\n";
-	cout << " ( ') "<< mid_of_weapon << "\n";
-	cout << " (  )o"<< bot_of_weapon << "\n";
-	cout << " (_)_)";
+	cout << " _()_ "<< top_of_weapon [weaponNumber] << "\n";
+	cout << " ( ') "<< mid_of_weapon [weaponNumber]<< "\n";
+	cout << " (  )o"<< bot_of_weapon [weaponNumber]<< "\n";
+	cout << " (_)_)"<< gnd_of_weapon [weaponNumber];
 
 }
 
-void setWeapon(string type)
+void setWeapon(char type)
 
 {
+	switch (type)
+	{
+		case 'r':
+		case 'R':
+			if (weaponNumber < 3)
+			{
+				weaponNumber += 1;
+			}
+			else
+				weaponNumber = 0;
+			break;
+		case 'a':
+		case 'A':
 
-	if (type == "staff" || type == "Staff")
-		{
-			top_of_weapon = "|  ";
-			mid_of_weapon = "|  ";
-			bot_of_weapon = "|  ";
-		}	
-	else if (type == "sword" || type == "Sword")
-		{
-			top_of_weapon = " / ";
-			mid_of_weapon = "/  ";
-			bot_of_weapon = "\\  ";
-		}
+			break;
+		case 'q':
+		case 'Q':
+			inLoop = 0;
+			break;
+	
+		default:
+			break;
+	}
 
 }
 
 int main()
 {
 	system("cls");
-	string wtype;
-	cout << "Select Weapon Type\n";
-	cin >> wtype;
-	setWeapon(wtype);
+	cout << "\n\n\n\n\n\n\n";
+	
 	drawChar();
 	drawFloor();
+	while (inLoop == 1)
+	{
+		charCmd = getch();
+		system("cls");
+		setWeapon(charCmd);
+		cout << "\n\n\n\n\n\n\n";
+		drawChar();
+		drawFloor();
+	}
 
 	return 0;
 }
