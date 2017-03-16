@@ -69,6 +69,8 @@ int main()
 	
 	drawChar();
 	drawFloor();
+	cout << "Press r to change weapon" << endl;
+	cout << "press q to exit" << endl;
 	while (inLoop == 1)
 	{
 		charCmd = getch();
@@ -77,6 +79,9 @@ int main()
 		cout << "\n\n\n\n\n\n\n";
 		drawChar();
 		drawFloor();
+		cout << "Press r to change weapon"<< endl;
+		cout << "Press q to exit" << endl;
+	
 	}
 
 	return 0;
