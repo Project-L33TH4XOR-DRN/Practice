@@ -46,10 +46,19 @@ void setWeapon(char type)
 		case 'R':
 			if (weaponNumber < 3)
 			{
-				weaponNumber += 1;
+				weaponNumber++;
 			}
 			else
 				weaponNumber = 0;
+			break;
+		case 'e':
+		case 'E':
+			if (weaponNumber > 0)
+			{
+				weaponNumber--;
+			}
+			else
+				weaponNumber = 3;
 			break;
 		case 'q':
 		case 'Q':
@@ -69,7 +78,7 @@ int main()
 	
 	drawChar();
 	drawFloor();
-	cout << "Press r to change weapon" << endl;
+	cout << "Press e or r to change weapon" << endl;
 	cout << "press q to exit" << endl;
 	while (inLoop == 1)
 	{
@@ -79,7 +88,7 @@ int main()
 		cout << "\n\n\n\n\n\n\n";
 		drawChar();
 		drawFloor();
-		cout << "Press r to change weapon"<< endl;
+		cout << "Press e or r to change weapon"<< endl;
 		cout << "Press q to exit" << endl;
 	
 	}
