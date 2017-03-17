@@ -4,7 +4,7 @@
 #include <fstream>
 #include <conio.h>
 #include <string>
-
+#include <unistd.h>
 using namespace std;
 
 int inLoop = 1;
@@ -60,13 +60,25 @@ void charAttack(char attack)
 		switch (weaponNumber)
 		{
 			case 0:
-				bot_of_char = "(  )=o";
-				reDraw;
-				//how to wait?
-				bot_of_char = "(  )o";
-				reDraw;
+				if (bot_of_char == "(  )o")
+				{
+					bot_of_char = "(  )=o";
+				}
+				else
+				{
+					bot_of_char = "(  )o";
+				}
+		//		how to use wait function?
 				break;
 			case 1:
+				if (mid_of_weapon[weaponNumber] == "|  ")
+				{
+					mid_of_weapon[weaponNumber] = "|      =o";
+				}
+				else
+				{
+					mid_of_weapon[weaponNumber] = "|  ";
+				}
 				break;
 			case 2:
 				break;
