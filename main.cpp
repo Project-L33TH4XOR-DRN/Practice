@@ -4,12 +4,17 @@
 #include <fstream>
 #include <conio.h>
 #include <string>
+
 using namespace std;
 
 int inLoop = 1;
 int width = 50;
 char charCmd;
 int weaponNumber = 0;
+string top_of_char = "_()_ ";
+string mid_of_char = "( ') ";
+string bot_of_char = "(  )o";
+string gnd_of_char = "(_)_)";
 string top_of_weapon[] = {"", "|  ", "  /", "\\|/"};
 string mid_of_weapon[] = {"", "|  ", " / ", " Y "};
 string bot_of_weapon[] = {"", "|  ", "\\  ", " | "};
@@ -30,12 +35,49 @@ void drawFloor()
 
 void drawChar()
 {
-	cout << " _()_ "<< top_of_weapon [weaponNumber] << "\n";
-	cout << " ( ') "<< mid_of_weapon [weaponNumber]<< "\n";
-	cout << " (  )o"<< bot_of_weapon [weaponNumber]<< "\n";
-	cout << " (_)_)"<< gnd_of_weapon [weaponNumber];
+	cout << top_of_char << top_of_weapon [weaponNumber]<< "\n";
+	cout << mid_of_char << mid_of_weapon [weaponNumber]<< "\n";
+	cout << bot_of_char << bot_of_weapon [weaponNumber]<< "\n";
+	cout << gnd_of_char << gnd_of_weapon [weaponNumber];
 
 }
+
+void reDraw()
+{
+	system("cls");
+        cout << "\n\n\n\n\n\n\n";
+        drawChar();
+        drawFloor();
+        cout << "Press e or r to change weapon" << endl;
+        cout << "Press q to exit" << endl;
+}
+
+
+void charAttack(char attack)
+{
+	if (attack == 'z')
+	{	
+		switch (weaponNumber)
+		{
+			case 0:
+				bot_of_char = "(  )=o";
+				reDraw;
+				//how to wait?
+				bot_of_char = "(  )o";
+				reDraw;
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+		}
+
+	}
+}
+
+
 
 void setWeapon(char type)
 
@@ -71,6 +113,8 @@ void setWeapon(char type)
 
 }
 
+//--------------------- MAIN --------------------------------
+
 int main()
 {
 	system("cls");
@@ -79,17 +123,13 @@ int main()
 	drawChar();
 	drawFloor();
 	cout << "Press e or r to change weapon" << endl;
-	cout << "press q to exit" << endl;
+	cout << "Press q to exit" << endl;
 	while (inLoop == 1)
 	{
 		charCmd = getch();
-		system("cls");
 		setWeapon(charCmd);
-		cout << "\n\n\n\n\n\n\n";
-		drawChar();
-		drawFloor();
-		cout << "Press e or r to change weapon"<< endl;
-		cout << "Press q to exit" << endl;
+		charAttack(charCmd);
+		reDraw();
 	
 	}
 
