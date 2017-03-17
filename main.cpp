@@ -11,15 +11,53 @@ int inLoop = 1;
 int width = 50;
 char charCmd;
 int weaponNumber = 0;
-string top_of_char = "_()_ ";
-string mid_of_char = "( ') ";
-string bot_of_char = "(  )o";
-string gnd_of_char = "(_)_)";
-string top_of_weapon[] = {"", "|  ", "  /", "\\|/"};
-string mid_of_weapon[] = {"", "|  ", " / ", " Y "};
-string bot_of_weapon[] = {"", "|  ", "\\  ", " | "};
-string gnd_of_weapon[] = {"", "|  ", "   ", " | "};
+const int maxWeaponNumber = 4;
+const string t = "_()_ ";
+const string m = "( ') ";
+const string b = "(  )o";
+const string g = "(_)_)";
+const string tw[] = {"", "|  ", "  /", "\\|/"};
+const string mw[] = {"", "|  ", " / ", " Y "};
+const string bw[] = {"", "|  ", "\\  ", " | "};
+const string gw[] = {"", "|  ", "   ", " | "};
 
+void drawChar();
+void drawFloor();
+void setWeapon(char type);
+void reDraw();
+void charAttack(char attack);
+
+string top_of_char = t;
+string mid_of_char = m;
+string bot_of_char = b;
+string gnd_of_char = g;
+string top_of_weapon[maxWeaponNumber] = tw;
+string mid_of_weapon[maxWeaponNumber] = mw;
+string bot_of_weapon[maxWeaponNumber] = bw;
+string gnd_of_weapon[maxWeaponNumber] = gw;
+string top_attack;
+string mid_attack;
+string bot_attack;
+string gnd_attack;
+
+int main()
+{
+	system("cls");
+	cout << "\n\n\n\n\n\n\n";
+        drawChar();
+        drawFloor();
+        cout << "Press e or r to change weapon" << endl;
+        cout << "Press q to exit" << endl;
+
+	while (inLoop == 1)
+	{
+	        charCmd = getch();
+	        setWeapon(charCmd);
+	        charAttack(charCmd);
+	        reDraw();
+        }
+															        return 0;
+}
 
 void drawFloor()
 {
@@ -35,10 +73,10 @@ void drawFloor()
 
 void drawChar()
 {
-	cout << top_of_char << top_of_weapon [weaponNumber]<< "\n";
-	cout << mid_of_char << mid_of_weapon [weaponNumber]<< "\n";
-	cout << bot_of_char << bot_of_weapon [weaponNumber]<< "\n";
-	cout << gnd_of_char << gnd_of_weapon [weaponNumber];
+	cout << top_of_char << top_of_weapon [weaponNumber]<< top_attack << "\n";
+	cout << mid_of_char << mid_of_weapon [weaponNumber]<< mid_attack << "\n";
+	cout << bot_of_char << bot_of_weapon [weaponNumber]<< bot_attack << "\n";
+	cout << gnd_of_char << gnd_of_weapon [weaponNumber]<< gnd_attack;
 
 }
 
@@ -52,6 +90,25 @@ void reDraw()
         cout << "Press q to exit" << endl;
 }
 
+void resetChar()
+{
+	top_of_char = t;
+	mid_of_char = m;
+	bot_of_char = b;
+	gnd_of_char = g;
+	for (int i = 0; i < maxWeaponNumber; i++)
+	{
+		top_of_weapon[i] = tw[i];
+		mid_of_weapon[i] = mw[i];
+		bot_of_weapon[i] = bw[i];
+		gnd_of_weapon[i] = gw[i];
+	}
+	top_attack = "";
+	mid_attack = "";
+	bot_attack = "";
+	gnd_attack = "";
+
+}
 
 void charAttack(char attack)
 {
@@ -66,18 +123,23 @@ void charAttack(char attack)
 				}
 				else
 				{
-					bot_of_char = "(  )o";
+					resetChar();
 				}
 		//		how to use wait function?
 				break;
 			case 1:
 				if (mid_of_weapon[weaponNumber] == "|  ")
 				{
-					mid_of_weapon[weaponNumber] = "|      =o";
+				
+					top_of_weapon[weaponNumber] = " | ";
+					mid_of_weapon[weaponNumber] = " | ";
+					bot_of_weapon[weaponNumber] = " | ";
+					gnd_of_weapon[weaponNumber] = " | ";
+					mid_attack = "   =O";
 				}
 				else
 				{
-					mid_of_weapon[weaponNumber] = "|  ";
+					resetChar();
 				}
 				break;
 			case 2:
@@ -98,6 +160,7 @@ void setWeapon(char type)
 	{
 		case 'r':
 		case 'R':
+			resetChar();
 			if (weaponNumber < 3)
 			{
 				weaponNumber++;
@@ -107,6 +170,7 @@ void setWeapon(char type)
 			break;
 		case 'e':
 		case 'E':
+			resetChar();
 			if (weaponNumber > 0)
 			{
 				weaponNumber--;
@@ -123,27 +187,4 @@ void setWeapon(char type)
 			break;
 	}
 
-}
-
-//--------------------- MAIN --------------------------------
-
-int main()
-{
-	system("cls");
-	cout << "\n\n\n\n\n\n\n";
-	
-	drawChar();
-	drawFloor();
-	cout << "Press e or r to change weapon" << endl;
-	cout << "Press q to exit" << endl;
-	while (inLoop == 1)
-	{
-		charCmd = getch();
-		setWeapon(charCmd);
-		charAttack(charCmd);
-		reDraw();
-	
-	}
-
-	return 0;
 }
