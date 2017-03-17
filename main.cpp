@@ -21,11 +21,16 @@ const string mw[] = {"", "|  ", " / ", " Y "};
 const string bw[] = {"", "|  ", "\\  ", " | "};
 const string gw[] = {"", "|  ", "   ", " | "};
 
+
+//----------Function Declaration--------------
 void drawChar();
 void drawFloor();
 void setWeapon(char type);
 void reDraw();
 void charAttack(char attack);
+void displayMessage();
+//---------End Function Declaration-----------
+
 
 string top_of_char = t;
 string mid_of_char = m;
@@ -46,9 +51,7 @@ int main()
 	cout << "\n\n\n\n\n\n\n";
         drawChar();
         drawFloor();
-        cout << "Press e or r to change weapon" << endl;
-        cout << "Press q to exit" << endl;
-
+	displayMessage();
 	while (inLoop == 1)
 	{
 	        charCmd = getch();
@@ -57,6 +60,13 @@ int main()
 	        reDraw();
         }
 															        return 0;
+}
+
+void displayMessage()
+{
+	cout << "z to attack" << endl; 
+	cout << "e or r to change weapon" << endl;
+	cout << "q to quit" << endl;
 }
 
 void drawFloor()
@@ -86,8 +96,7 @@ void reDraw()
         cout << "\n\n\n\n\n\n\n";
         drawChar();
         drawFloor();
-        cout << "Press e or r to change weapon" << endl;
-        cout << "Press q to exit" << endl;
+	displayMessage();
 }
 
 void resetChar()
