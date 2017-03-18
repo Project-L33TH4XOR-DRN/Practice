@@ -13,8 +13,8 @@ char charCmd;
 int weaponNumber = 0;
 const int maxWeaponNumber = 4;
 const string t = "_()_ ";
-const string m = "( ') ";
-const string b = "(  )o";
+const string m = "( \") ";
+const string b = "(o )o";
 const string g = "(_)_)";
 const string tw[] = {"", "|  ", "  /", "\\|/"};
 const string mw[] = {"", "|  ", " / ", " Y "};
@@ -29,6 +29,7 @@ void setWeapon(char type);
 void reDraw();
 void charAttack(char attack);
 void displayMessage();
+void angryFace();
 //---------End Function Declaration-----------
 
 
@@ -79,7 +80,10 @@ void drawFloor()
 
 }
 
-
+void angryFace()
+{
+	mid_of_char = "(><) ";
+}
 
 void drawChar()
 {
@@ -126,9 +130,10 @@ void charAttack(char attack)
 		switch (weaponNumber)
 		{
 			case 0:
-				if (bot_of_char == "(  )o")
+				if (bot_of_char == "(o )o")
 				{
-					bot_of_char = "(  )=o";
+					angryFace();
+					bot_of_char = "(o )=o";
 				}
 				else
 				{
@@ -139,6 +144,7 @@ void charAttack(char attack)
 			case 1:
 				if (mid_of_weapon[weaponNumber] == "|  ")
 				{
+					angryFace();
 					top_of_weapon[weaponNumber] = " | ";
 					mid_of_weapon[weaponNumber] = " | ";
 					bot_of_weapon[weaponNumber] = "| ";
@@ -154,6 +160,7 @@ void charAttack(char attack)
 			case 2:
 				if (mid_of_weapon[weaponNumber] == " / ")
 				{
+					angryFace();
 					top_of_weapon[weaponNumber] = "   ";
 					mid_of_weapon[weaponNumber] = "   ";
 					bot_of_weapon[weaponNumber] = "|----";
@@ -167,6 +174,7 @@ void charAttack(char attack)
 			case 3:
 				if (mid_of_weapon[weaponNumber] == " Y ")
 				{
+					angryFace();
 					top_of_weapon[weaponNumber] = " \\ /";
 					mid_of_weapon[weaponNumber] = "  X_";
 					bot_of_weapon[weaponNumber] = "/  ";
