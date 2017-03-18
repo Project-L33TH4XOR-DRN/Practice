@@ -20,7 +20,7 @@ const string tw[] = {"", "|  ", "  /", "\\|/"};
 const string mw[] = {"", "|  ", " / ", " Y "};
 const string bw[] = {"", "|  ", "\\  ", " | "};
 const string gw[] = {"", "|  ", "   ", " | "};
-
+const string topHP = " _______________ "; 			// 15x_
 
 //----------Function Declaration--------------
 void drawChar();
@@ -29,8 +29,8 @@ void setWeapon(char type);
 void reDraw();
 void charAttack(char attack);
 void displayMessage();
+void setRemainingHP();
 //---------End Function Declaration-----------
-
 
 string top_of_char = t;
 string mid_of_char = m;
@@ -44,12 +44,17 @@ string top_attack;
 string mid_attack;
 string bot_attack;
 string gnd_attack;
+int remainingHP = 12;
+string botHP = "|MMMMMMMMMMMMMMM|";
 
 int main()
 {
 	system("cls");
-	cout << "\n\n\n\n\n\n\n";
-        drawChar();
+	cout << "\t\t\t   " << topHP << "\n";
+        cout << "\t\t\tHP:" << botHP << "\n";
+	cout << "\n\n\n\n\n";
+
+	drawChar();
         drawFloor();
 	displayMessage();
 	while (inLoop == 1)
@@ -61,6 +66,15 @@ int main()
         }
 															        return 0;
 }
+
+void setRemainingHP()
+{
+	botHP = "|";
+	botHP.append("MMMMMMMMMMMMMMM",remainingHP);
+	botHP.append("_______________",15-remainingHP);
+	botHP.append("|");
+}
+
 
 void displayMessage()
 {
@@ -93,7 +107,10 @@ void drawChar()
 void reDraw()
 {
 	system("cls");
-        cout << "\n\n\n\n\n\n\n";
+        setRemainingHP();
+	cout << "\t\t\t   " << topHP << "\n";
+	cout << "\t\t\tHP:" << botHP << "\n";
+	cout << "\n\n\n\n\n";
         drawChar();
         drawFloor();
 	displayMessage();
