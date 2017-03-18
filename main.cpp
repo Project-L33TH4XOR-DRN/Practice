@@ -31,6 +31,7 @@ void charAttack(char attack);
 void displayMessage();
 void setRemainingHP();
 void angryFace();
+void takeDamage(int dmg);
 //---------End Function Declaration-----------
 
 string top_of_char = t;
@@ -45,7 +46,8 @@ string top_attack;
 string mid_attack;
 string bot_attack;
 string gnd_attack;
-int remainingHP = 12;
+int remainingHP = 15;
+int damageReceived;
 string botHP = "|MMMMMMMMMMMMMMM|";
 
 int main()
@@ -76,6 +78,10 @@ void setRemainingHP()
 	botHP.append("|");
 }
 
+void takeDamage(int dmg)
+{
+	remainingHP -= dmg;
+}
 
 void displayMessage()
 {
@@ -114,7 +120,10 @@ void reDraw()
         setRemainingHP();
 	cout << "\t\t\t   " << topHP << "\n";
 	cout << "\t\t\tHP:" << botHP << "\n";
-	cout << "\n\n\n\n\n";
+	cout << "\n\n";
+	if (damageReceived > 0)
+		cout << "  " << damageReceived;
+	cout << "\n\n\n";
         drawChar();
         drawFloor();
 	displayMessage();
@@ -137,7 +146,7 @@ void resetChar()
 	mid_attack = "";
 	bot_attack = "";
 	gnd_attack = "";
-
+	damageReceived = 0;
 }
 
 void charAttack(char attack)
@@ -197,6 +206,8 @@ void charAttack(char attack)
 					bot_of_weapon[weaponNumber] = "/  ";
 					gnd_of_weapon[weaponNumber] = "/   ";
 					bot_of_char = "(  )=o";
+					damageReceived = 2;
+					takeDamage(damageReceived);
 				}
 				else
 				{
