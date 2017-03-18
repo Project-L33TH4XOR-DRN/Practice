@@ -139,11 +139,11 @@ void charAttack(char attack)
 			case 1:
 				if (mid_of_weapon[weaponNumber] == "|  ")
 				{
-				
 					top_of_weapon[weaponNumber] = " | ";
 					mid_of_weapon[weaponNumber] = " | ";
-					bot_of_weapon[weaponNumber] = " | ";
+					bot_of_weapon[weaponNumber] = "| ";
 					gnd_of_weapon[weaponNumber] = " | ";
+					bot_of_char = "(  )=o";
 					mid_attack = "   =O";
 				}
 				else
@@ -152,8 +152,32 @@ void charAttack(char attack)
 				}
 				break;
 			case 2:
+				if (mid_of_weapon[weaponNumber] == " / ")
+				{
+					top_of_weapon[weaponNumber] = "   ";
+					mid_of_weapon[weaponNumber] = "   ";
+					bot_of_weapon[weaponNumber] = "|----";
+					gnd_of_weapon[weaponNumber] = "   ";
+				}
+				else
+				{
+					resetChar();
+				}
 				break;
 			case 3:
+				if (mid_of_weapon[weaponNumber] == " Y ")
+				{
+					top_of_weapon[weaponNumber] = " \\ /";
+					mid_of_weapon[weaponNumber] = "  X_";
+					bot_of_weapon[weaponNumber] = "/  ";
+					gnd_of_weapon[weaponNumber] = "/   ";
+					bot_of_char = "(  )=o";
+				}
+				else
+				{
+					resetChar();
+
+				}
 				break;
 		}
 
