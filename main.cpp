@@ -33,6 +33,8 @@ void setRemainingHP();
 void angryFace();
 void takeDamage(int dmg);
 void setCharDead();
+void charSpell(char spell);
+void fireball();
 //---------End Function Declaration-----------
 
 string top_of_char = t;
@@ -48,6 +50,7 @@ string mid_attack;
 string bot_attack;
 string gnd_attack;
 string gameMessage;
+int timeTick = 0;
 int remainingHP = 15;
 int damageReceived;
 string botHP = "|MMMMMMMMMMMMMMM|";
@@ -68,7 +71,9 @@ int main()
 	        charCmd = getch();
 	        setWeapon(charCmd);
 	        charAttack(charCmd);
+		charSpell(charCmd);
 	        reDraw();
+		timeTick++;
         }
 															        return 0;
 }
@@ -101,7 +106,7 @@ void takeDamage(int dmg)
 
 void displayMessage()
 {
-	cout << "z to attack" << endl; 
+	cout << "z to attack, x to cast spell" << endl; 
 	cout << "e or r to change weapon" << endl;
 	cout << "q to quit" << endl;
 }
@@ -174,10 +179,6 @@ void resetChar()
 		bot_of_weapon[i] = bw[i];
 		gnd_of_weapon[i] = gw[i];
 	}
-	top_attack = "";
-	mid_attack = "";
-	bot_attack = "";
-	gnd_attack = "";
 	damageReceived = 0;
 }
 
@@ -203,12 +204,11 @@ void charAttack(char attack)
 				if (mid_of_weapon[weaponNumber] == "|  ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = " | ";
-					mid_of_weapon[weaponNumber] = " | ";
-					bot_of_weapon[weaponNumber] = "| ";
-					gnd_of_weapon[weaponNumber] = " | ";
+					top_of_weapon[weaponNumber] = "   /";
+					mid_of_weapon[weaponNumber] = "  / ";
+					bot_of_weapon[weaponNumber] = "/ ";
+					gnd_of_weapon[weaponNumber] = "/ ";
 					bot_of_char = "(  )=o";
-					mid_attack = "   =O";
 				}
 				else
 				{
@@ -252,7 +252,39 @@ void charAttack(char attack)
 	}
 }
 
+void fireball()
+{
+	mid_attack.insert (0, "<_)");
 
+}
+
+void charSpell(char spell)
+{
+	if (spell == 'x')
+	{
+		switch (weaponNumber)
+		{
+			case 0:
+				break;
+			case 1:
+				if (mid_of_weapon[weaponNumber] == "|  ")
+				{
+					angryFace();
+					top_of_weapon[weaponNumber] = " | ";
+					mid_of_weapon[weaponNumber] = " | ";
+					bot_of_weapon[weaponNumber] = "| ";
+					gnd_of_weapon[weaponNumber] = " | ";
+					bot_of_char = "(  )=o";
+					fireball();
+				}
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+		}
+	}
+}
 
 void setWeapon(char type)
 
