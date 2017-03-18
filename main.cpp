@@ -32,6 +32,7 @@ void displayMessage();
 void setRemainingHP();
 void angryFace();
 void takeDamage(int dmg);
+void setCharDead();
 //---------End Function Declaration-----------
 
 string top_of_char = t;
@@ -73,14 +74,25 @@ int main()
 void setRemainingHP()
 {
 	botHP = "|";
-	botHP.append("MMMMMMMMMMMMMMM",remainingHP);
-	botHP.append("_______________",15-remainingHP);
+	if (remainingHP > 0)
+	{
+		botHP.append("MMMMMMMMMMMMMMM",remainingHP);
+		botHP.append("_______________",15-remainingHP);
+	}
+	else
+		botHP.append("______DEAD_____");
 	botHP.append("|");
 }
 
 void takeDamage(int dmg)
 {
-	remainingHP -= dmg;
+	if (remainingHP > dmg)
+		remainingHP -= dmg;
+	else
+	{
+		remainingHP = 0;
+		setCharDead();
+	}
 }
 
 void displayMessage()
@@ -97,6 +109,21 @@ void drawFloor()
         for (int i = 0; i < width; i++)
                 cout << "_";
         cout << endl;
+
+}
+
+void setCharDead()
+{
+	top_of_char = "      GG";
+	mid_of_char = "";
+	bot_of_char = "         _()_";
+	gnd_of_char = "(_)_)( o)(XX)";
+	top_of_weapon[weaponNumber] = "";
+	mid_of_weapon[weaponNumber] = "";
+	bot_of_weapon[weaponNumber] = "";
+	gnd_of_weapon[weaponNumber] = "";
+	damageReceived = 0;
+	inLoop = 0;
 
 }
 
