@@ -47,6 +47,7 @@ string top_attack;
 string mid_attack;
 string bot_attack;
 string gnd_attack;
+string gameMessage;
 int remainingHP = 15;
 int damageReceived;
 string botHP = "|MMMMMMMMMMMMMMM|";
@@ -54,8 +55,9 @@ string botHP = "|MMMMMMMMMMMMMMM|";
 int main()
 {
 	system("cls");
-	cout << "\t\t\t   " << topHP << "\n";
-        cout << "\t\t\tHP:" << botHP << "\n";
+	cout << "\t\t\t\t   " << topHP << "\n";
+        cout << "\t\t\t\tHP:" << botHP << "\n";
+	cout << "\t\t\t\t" << gameMessage;
 	cout << "\n\n\n\n\n";
 
 	drawChar();
@@ -78,6 +80,8 @@ void setRemainingHP()
 	{
 		botHP.append("MMMMMMMMMMMMMMM",remainingHP);
 		botHP.append("_______________",15-remainingHP);
+		if (remainingHP < 2)
+			gameMessage = "*Warning HP Low";
 	}
 	else
 		botHP.append("______DEAD_____");
@@ -145,8 +149,9 @@ void reDraw()
 {
 	system("cls");
         setRemainingHP();
-	cout << "\t\t\t   " << topHP << "\n";
-	cout << "\t\t\tHP:" << botHP << "\n";
+	cout << "\t\t\t\t   " << topHP << "\n";
+	cout << "\t\t\t\tHP:" << botHP << "\n";
+	cout << "\t\t\t\t" << gameMessage;
 	cout << "\n\n";
 	if (damageReceived > 0)
 		cout << "  " << damageReceived;
