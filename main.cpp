@@ -257,6 +257,15 @@ void charAttack(char attack)
 	}
 }
 
+void wind()
+{
+	top_attack.insert (0, "         ");
+	mid_attack.insert (0, "         ");
+	bot_attack.insert (0, "~  ~  ~  ");
+	gnd_attack.insert (0, "         ");
+	deleteFarSpells();
+}
+
 void fireball()
 {
 	top_attack.insert (0, ",,,   ,,,");
@@ -302,6 +311,16 @@ void charSpell(char spell)
 		switch (weaponNumber)
 		{
 			case 0:
+				if (bot_of_char == "(o )o")
+				{
+					angryFace();
+					bot_of_char = "(o )=L";
+					wind();
+				}
+				else
+				{
+					resetChar();
+				}
 				break;
 			case 1:
 				if (mid_of_weapon[weaponNumber] == "|  ")
