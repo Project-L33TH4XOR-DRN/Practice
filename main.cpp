@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <fstream>
 #include <conio.h>
@@ -40,18 +38,9 @@ void moveSpells();
 void deleteFarSpells();
 //---------End Function Declaration-----------
 
-string top_of_char = t;
-string mid_of_char = m;
-string bot_of_char = b;
-string gnd_of_char = g;
-string top_of_weapon[maxWeaponNumber] = tw;
-string mid_of_weapon[maxWeaponNumber] = mw;
-string bot_of_weapon[maxWeaponNumber] = bw;
-string gnd_of_weapon[maxWeaponNumber] = gw;
-string top_attack;
-string mid_attack;
-string bot_attack;
-string gnd_attack;
+string mainCharacter[4] = {t,m,b,g};
+string charWeapon[4][maxWeaponNumber] = {tw,mw,bw,gw};
+string attackAnimation[4];
 string gameMessage;
 int remainingHP = 15;
 int remainingMP = 15;
@@ -137,34 +126,34 @@ void drawFloor()
 
 void setCharDead()
 {
-	top_of_char = "     GG";
-	mid_of_char = "            ~";
-	bot_of_char = "         _()_";
-	gnd_of_char = "(_)_)( o)(XX)";
-	top_of_weapon[weaponNumber] = "";
-	mid_of_weapon[weaponNumber] = "";
-	bot_of_weapon[weaponNumber] = "";
-	gnd_of_weapon[weaponNumber] = "";
-	top_attack = "";
-	mid_attack = "";
-	bot_attack = "";
-	gnd_attack = "";
+	mainCharacter[0] = "     GG";
+	mainCharacter[1] = "            ~";
+	mainCharacter[2] = "         _()_";
+	mainCharacter[3] = "(_)_)( o)(XX)";
+	charWeapon[0][weaponNumber] = "";
+	charWeapon[1][weaponNumber] = "";
+	charWeapon[2][weaponNumber] = "";
+	charWeapon[3][weaponNumber] = "";
 	gameMessage = "   G A M E   O V E R";
+	for (int i = 0; i < 4; i++)
+		attackAnimation[i] = "";
 	damageReceived = 0;
 	inLoop = 0;
 }
 
 void angryFace()
 {
-	mid_of_char = "(><) ";
+	mainCharacter[1] = "(><) ";
 }
 
 void drawChar()
 {
-	cout << top_of_char << top_of_weapon [weaponNumber]<< top_attack << "\n";
-	cout << mid_of_char << mid_of_weapon [weaponNumber]<< mid_attack << "\n";
-	cout << bot_of_char << bot_of_weapon [weaponNumber]<< bot_attack << "\n";
-	cout << gnd_of_char << gnd_of_weapon [weaponNumber]<< gnd_attack;
+	for (int i = 0; i < 4; i++)
+	{
+		cout << mainCharacter[i] << charWeapon[i][weaponNumber] << attackAnimation[i];
+		if (i != 3)
+			cout << "\n";
+	}	
 }
 
 void reDraw()
@@ -188,16 +177,16 @@ void reDraw()
 
 void resetChar()
 {
-	top_of_char = t;
-	mid_of_char = m;
-	bot_of_char = b;
-	gnd_of_char = g;
+	mainCharacter[0] = t;
+	mainCharacter[1] = m;
+	mainCharacter[2] = b;
+	mainCharacter[3] = g;
 	for (int i = 0; i < maxWeaponNumber; i++)
 	{
-		top_of_weapon[i] = tw[i];
-		mid_of_weapon[i] = mw[i];
-		bot_of_weapon[i] = bw[i];
-		gnd_of_weapon[i] = gw[i];
+		charWeapon[0][i] = tw[i];
+		charWeapon[1][i] = mw[i];
+		charWeapon[2][i] = bw[i];
+		charWeapon[3][i] = gw[i];
 	}
 	damageReceived = 0;
 }
@@ -209,10 +198,10 @@ void charAttack(char attack)
 		switch (weaponNumber)
 		{
 			case 0:
-				if (bot_of_char == "(o )o")
+				if (mainCharacter[2] == "(o )o")
 				{
 					angryFace();
-					bot_of_char = "(o )=o";
+					mainCharacter[2] = "(o )=o";
 				}
 				else
 				{
@@ -221,14 +210,14 @@ void charAttack(char attack)
 		//		how to use wait function?
 				break;
 			case 1:
-				if (mid_of_weapon[weaponNumber] == "|  ")
+				if (charWeapon[1][weaponNumber] == "|  ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = "   /";
-					mid_of_weapon[weaponNumber] = "  / ";
-					bot_of_weapon[weaponNumber] = "/  ";
-					gnd_of_weapon[weaponNumber] = "/   ";
-					bot_of_char = "(  )=o";
+					charWeapon[0][weaponNumber] = " | ";
+					charWeapon[1][weaponNumber] = " | ";
+					charWeapon[2][weaponNumber] = "| ";
+					charWeapon[3][weaponNumber] = " | ";
+					mainCharacter[2] = "(  )=o";
 				}
 				else
 				{
@@ -236,13 +225,13 @@ void charAttack(char attack)
 				}
 				break;
 			case 2:
-				if (mid_of_weapon[weaponNumber] == " / ")
+				if (charWeapon[1][weaponNumber] == " / ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = "     ";
-					mid_of_weapon[weaponNumber] = "     ";
-					bot_of_weapon[weaponNumber] = "|----";
-					gnd_of_weapon[weaponNumber] = "     ";
+					charWeapon[0][weaponNumber] = "     ";
+					charWeapon[1][weaponNumber] = "     ";
+					charWeapon[2][weaponNumber] = "|----";
+					charWeapon[3][weaponNumber] = "     ";
 				}
 				else
 				{
@@ -250,14 +239,14 @@ void charAttack(char attack)
 				}
 				break;
 			case 3:
-				if (mid_of_weapon[weaponNumber] == " Y ")
+				if (charWeapon[1][weaponNumber] == " Y ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = " \\ /";
-					mid_of_weapon[weaponNumber] = "  X_";
-					bot_of_weapon[weaponNumber] = "/  ";
-					gnd_of_weapon[weaponNumber] = "/   ";
-					bot_of_char = "(  )=o";
+					charWeapon[0][weaponNumber] = " \\ /";
+					charWeapon[1][weaponNumber] = "  X_";
+					charWeapon[2][weaponNumber] = "/  ";
+					charWeapon[3][weaponNumber] = "/   ";
+					mainCharacter[2] = "(  )=o";
 					damageReceived = 2;
 					takeDamage(damageReceived);
 				}
@@ -273,48 +262,44 @@ void charAttack(char attack)
 
 void wind()
 {
-	top_attack.insert (0, "         ");
-	mid_attack.insert (0, "         ");
-	bot_attack.insert (0, "~  ~  ~  ");
-	gnd_attack.insert (0, "         ");
+	attackAnimation[0].insert (0, "         ");
+	attackAnimation[1].insert (0, "         ");
+	attackAnimation[2].insert (0, "~  ~  ~  ");
+	attackAnimation[3].insert (0, "         ");
 	deleteFarSpells();
 }
 
 void fireball()
 {
-	top_attack.insert (0, ",,,   ,,,");
-	mid_attack.insert (0, "<_),,,<_)");
-	bot_attack.insert (0, "   <_)   ");
-	gnd_attack.insert (0, "         ");
+	attackAnimation[0].insert (0, ",,,   ,,,");
+	attackAnimation[1].insert (0, "<_),,,<_)");
+	attackAnimation[2].insert (0, "   <_)   ");
+	attackAnimation[3].insert (0, "         ");
 	deleteFarSpells();
 }
 
 void lightning()
 {
-	top_attack.insert (0, "/\\  /  \\/");
-	mid_attack.insert (0, "  \\/ /\\  ");
-	bot_attack.insert (0, "/\\  /  \\/");
-	gnd_attack.insert (0, "  \\/ /\\  ");
+	attackAnimation[0].insert (0, "/\\  /  \\/");
+	attackAnimation[1].insert (0, "  \\/ /\\  ");
+	attackAnimation[2].insert (0, "/\\  /  \\/");
+	attackAnimation[3].insert (0, "  \\/ /\\  ");
 	deleteFarSpells();
 }
 
 void moveSpells()
 {
-	top_attack.insert (0, "  ");
-	mid_attack.insert (0, "  ");
-	bot_attack.insert (0, "  ");
-	gnd_attack.insert (0, "  ");
+	for (int i = 0; i < 4; i++)
+		attackAnimation[i].insert(0, "  ");
 	deleteFarSpells();
 }
 
 void deleteFarSpells()
 {
-	if (top_attack.length() > 40)
+	if (attackAnimation[0].length() > 40)
 	{
-		top_attack.erase (40, top_attack.length()-40);
-                mid_attack.erase (40, mid_attack.length()-40);
-                bot_attack.erase (40, bot_attack.length()-40);
-                gnd_attack.erase (40, gnd_attack.length()-40);
+		for (int i = 0; i < 4; i++)
+			attackAnimation[i].erase (40, attackAnimation[i].length()-40);
         }
 }
 
@@ -325,10 +310,10 @@ void charSpell(char spell)
 		switch (weaponNumber)
 		{
 			case 0:
-				if (bot_of_char == "(o )o")
+				if (mainCharacter[2] == "(o )o")
 				{
 					angryFace();
-					bot_of_char = "(o )=L";
+					mainCharacter[2] = "(o )=L";
 					if (remainingMP > 0)
 					{
 						remainingMP--;
@@ -343,14 +328,14 @@ void charSpell(char spell)
 				}
 				break;
 			case 1:
-				if (mid_of_weapon[weaponNumber] == "|  ")
+				if (charWeapon[1][weaponNumber] == "|  ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = " |  ";
-					mid_of_weapon[weaponNumber] = " | ";
-					bot_of_weapon[weaponNumber] = "| ";
-					gnd_of_weapon[weaponNumber] = " | ";
-					bot_of_char = "(  )=o";
+					charWeapon[0][weaponNumber] = " |  ";
+					charWeapon[1][weaponNumber] = " | ";
+					charWeapon[2][weaponNumber] = "| ";
+					charWeapon[3][weaponNumber] = " | ";
+					mainCharacter[2] = "(  )=o";
 					if (remainingMP > 1)
 					{
 						remainingMP -= 2;
@@ -366,11 +351,12 @@ void charSpell(char spell)
 				}
 				break;
 			case 2:
-				if (mid_of_weapon[weaponNumber] == " / ")
+				if (charWeapon[1][weaponNumber] == " / ")
 				{
-                                        angryFace();									                                        top_of_weapon[weaponNumber] = "     ";						                                        mid_of_weapon[weaponNumber] = "     ";
-					bot_of_weapon[weaponNumber] = "|----";
-					gnd_of_weapon[weaponNumber] = "     ";
+                                        angryFace();
+					charWeapon[0][weaponNumber] = "     ";						                                        charWeapon[1][weaponNumber] = "     ";
+					charWeapon[2][weaponNumber] = "|----";
+					charWeapon[3][weaponNumber] = "     ";
 					if (remainingMP > 2)
 					{
 						remainingMP -= 3;
