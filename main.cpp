@@ -35,18 +35,21 @@ void takeDamage(int dmg);
 void setCharDead();
 //---------End Function Declaration-----------
 
-string top_of_char = t;
-string mid_of_char = m;
-string bot_of_char = b;
-string gnd_of_char = g;
-string top_of_weapon[maxWeaponNumber] = tw;
-string mid_of_weapon[maxWeaponNumber] = mw;
-string bot_of_weapon[maxWeaponNumber] = bw;
-string gnd_of_weapon[maxWeaponNumber] = gw;
-string top_attack;
-string mid_attack;
-string bot_attack;
-string gnd_attack;
+string mainCharacter[4] = {t,m,b,g};
+//string top_of_char = t;
+//string mid_of_char = m;
+//string bot_of_char = b;
+//string gnd_of_char = g;
+string charWeapon[4][maxWeaponNumber] = {tw,mw,bw,gw};
+//string top_of_weapon[maxWeaponNumber] = tw;
+//string mid_of_weapon[maxWeaponNumber] = mw;
+//string bot_of_weapon[maxWeaponNumber] = bw;
+//string gnd_of_weapon[maxWeaponNumber] = gw;
+string attackAnimation[4];
+//string top_attack;
+//string mid_attack;
+//string bot_attack;
+//string gnd_attack;
 string gameMessage;
 int remainingHP = 15;
 int damageReceived;
@@ -118,14 +121,14 @@ void drawFloor()
 
 void setCharDead()
 {
-	top_of_char = "      GG";
-	mid_of_char = "";
-	bot_of_char = "         _()_";
-	gnd_of_char = "(_)_)( o)(XX)";
-	top_of_weapon[weaponNumber] = "";
-	mid_of_weapon[weaponNumber] = "";
-	bot_of_weapon[weaponNumber] = "";
-	gnd_of_weapon[weaponNumber] = "";
+	mainCharacter[0] = "     GG";
+	mainCharacter[1] = "            ~";
+	mainCharacter[2] = "         _()_";
+	mainCharacter[3] = "(_)_)( o)(XX)";
+	charWeapon[0][weaponNumber] = "";
+	charWeapon[1][weaponNumber] = "";
+	charWeapon[2][weaponNumber] = "";
+	charWeapon[3][weaponNumber] = "";
 	damageReceived = 0;
 	inLoop = 0;
 
@@ -133,16 +136,17 @@ void setCharDead()
 
 void angryFace()
 {
-	mid_of_char = "(><) ";
+	mainCharacter[1] = "(><) ";
 }
 
 void drawChar()
 {
-	cout << top_of_char << top_of_weapon [weaponNumber]<< top_attack << "\n";
-	cout << mid_of_char << mid_of_weapon [weaponNumber]<< mid_attack << "\n";
-	cout << bot_of_char << bot_of_weapon [weaponNumber]<< bot_attack << "\n";
-	cout << gnd_of_char << gnd_of_weapon [weaponNumber]<< gnd_attack;
-
+	for (int i = 0; i < 4; i++)
+	{
+		cout << mainCharacter[i] << charWeapon[i][weaponNumber] << attackAnimation[i];
+		if (i != 3)
+			cout << "\n";
+	}	
 }
 
 void reDraw()
@@ -163,21 +167,19 @@ void reDraw()
 
 void resetChar()
 {
-	top_of_char = t;
-	mid_of_char = m;
-	bot_of_char = b;
-	gnd_of_char = g;
+	mainCharacter[0] = t;
+	mainCharacter[1] = m;
+	mainCharacter[2] = b;
+	mainCharacter[3] = g;
 	for (int i = 0; i < maxWeaponNumber; i++)
 	{
-		top_of_weapon[i] = tw[i];
-		mid_of_weapon[i] = mw[i];
-		bot_of_weapon[i] = bw[i];
-		gnd_of_weapon[i] = gw[i];
+		charWeapon[0][i] = tw[i];
+		charWeapon[1][i] = mw[i];
+		charWeapon[2][i] = bw[i];
+		charWeapon[3][i] = gw[i];
 	}
-	top_attack = "";
-	mid_attack = "";
-	bot_attack = "";
-	gnd_attack = "";
+	for (int j  = 0; j < 4; j++)
+		attackAnimation[j] = "";
 	damageReceived = 0;
 }
 
@@ -188,10 +190,10 @@ void charAttack(char attack)
 		switch (weaponNumber)
 		{
 			case 0:
-				if (bot_of_char == "(o )o")
+				if (mainCharacter[2] == "(o )o")
 				{
 					angryFace();
-					bot_of_char = "(o )=o";
+					mainCharacter[2] = "(o )=o";
 				}
 				else
 				{
@@ -200,15 +202,15 @@ void charAttack(char attack)
 		//		how to use wait function?
 				break;
 			case 1:
-				if (mid_of_weapon[weaponNumber] == "|  ")
+				if (charWeapon[1][weaponNumber] == "|  ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = " | ";
-					mid_of_weapon[weaponNumber] = " | ";
-					bot_of_weapon[weaponNumber] = "| ";
-					gnd_of_weapon[weaponNumber] = " | ";
-					bot_of_char = "(  )=o";
-					mid_attack = "   =O";
+					charWeapon[0][weaponNumber] = " | ";
+					charWeapon[1][weaponNumber] = " | ";
+					charWeapon[2][weaponNumber] = "| ";
+					charWeapon[3][weaponNumber] = " | ";
+					mainCharacter[2] = "(  )=o";
+					attackAnimation[1] = "   =O";
 				}
 				else
 				{
@@ -216,13 +218,13 @@ void charAttack(char attack)
 				}
 				break;
 			case 2:
-				if (mid_of_weapon[weaponNumber] == " / ")
+				if (charWeapon[1][weaponNumber] == " / ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = "   ";
-					mid_of_weapon[weaponNumber] = "   ";
-					bot_of_weapon[weaponNumber] = "|----";
-					gnd_of_weapon[weaponNumber] = "   ";
+					charWeapon[0][weaponNumber] = "   ";
+					charWeapon[1][weaponNumber] = "   ";
+					charWeapon[2][weaponNumber] = "|----";
+					charWeapon[3][weaponNumber] = "   ";
 				}
 				else
 				{
@@ -230,14 +232,14 @@ void charAttack(char attack)
 				}
 				break;
 			case 3:
-				if (mid_of_weapon[weaponNumber] == " Y ")
+				if (charWeapon[1][weaponNumber] == " Y ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = " \\ /";
-					mid_of_weapon[weaponNumber] = "  X_";
-					bot_of_weapon[weaponNumber] = "/  ";
-					gnd_of_weapon[weaponNumber] = "/   ";
-					bot_of_char = "(  )=o";
+					charWeapon[0][weaponNumber] = " \\ /";
+					charWeapon[1][weaponNumber] = "  X_";
+					charWeapon[2][weaponNumber] = "/  ";
+					charWeapon[3][weaponNumber] = "/   ";
+					mainCharacter[2] = "(  )=o";
 					damageReceived = 2;
 					takeDamage(damageReceived);
 				}
