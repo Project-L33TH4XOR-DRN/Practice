@@ -35,6 +35,7 @@ void takeDamage(int dmg);
 void setCharDead();
 void charSpell(char spell);
 void fireball();
+void lightning ();
 void moveSpells();
 void deleteFarSpells();
 //---------End Function Declaration-----------
@@ -124,8 +125,8 @@ void drawFloor()
 
 void setCharDead()
 {
-	top_of_char = "      GG";
-	mid_of_char = "";
+	top_of_char = "     GG";
+	mid_of_char = "            ~";
 	bot_of_char = "         _()_";
 	gnd_of_char = "(_)_)( o)(XX)";
 	top_of_weapon[weaponNumber] = "";
@@ -240,7 +241,7 @@ void charAttack(char attack)
 					angryFace();
 					top_of_weapon[weaponNumber] = " \\ /";
 					mid_of_weapon[weaponNumber] = "  X_";
-					bot_of_weapon[weaponNumber] = "/  ";
+					bot_of_weapon[weaponNumber] = "/   ";
 					gnd_of_weapon[weaponNumber] = "/   ";
 					bot_of_char = "(  )=o";
 					damageReceived = 2;
@@ -262,6 +263,15 @@ void fireball()
 	mid_attack.insert (0, "<_),,,<_)");
 	bot_attack.insert (0, "   <_)   ");
 	gnd_attack.insert (0, "         ");
+	deleteFarSpells();
+}
+
+void lightning()
+{
+	top_attack.insert (0, "/\\  /  \\/");
+	mid_attack.insert (0, "  \\/ /\\  ");
+	bot_attack.insert (0, "/\\  /  \\/");
+	gnd_attack.insert (0, "  \\/ /\\  ");
 	deleteFarSpells();
 }
 
@@ -297,7 +307,7 @@ void charSpell(char spell)
 				if (mid_of_weapon[weaponNumber] == "|  ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = " | ";
+					top_of_weapon[weaponNumber] = " |  ";
 					mid_of_weapon[weaponNumber] = " | ";
 					bot_of_weapon[weaponNumber] = "| ";
 					gnd_of_weapon[weaponNumber] = " | ";
@@ -310,6 +320,17 @@ void charSpell(char spell)
 				}
 				break;
 			case 2:
+				if (mid_of_weapon[weaponNumber] == " / ")
+				{
+                                        angryFace();									                                        top_of_weapon[weaponNumber] = "     ";						                                        mid_of_weapon[weaponNumber] = "     ";
+					bot_of_weapon[weaponNumber] = "|----";
+					gnd_of_weapon[weaponNumber] = "     ";
+					lightning();
+				}
+				else
+				{
+				        resetChar();
+				}
 				break;
 			case 3:
 				break;
