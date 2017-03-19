@@ -21,7 +21,7 @@ const string mw[] = {"", "|  ", " / ", " Y "};
 const string bw[] = {"", "|  ", "\\  ", " | "};
 const string gw[] = {"", "|  ", "   ", " | "};
 const string topHP = " _______________ "; 			// 15x_
-
+const string topMP = " _______________ ";
 //----------Function Declaration--------------
 void drawChar();
 void drawFloor();
@@ -54,16 +54,20 @@ string bot_attack;
 string gnd_attack;
 string gameMessage;
 int remainingHP = 15;
+int remainingMP = 15;
 int damageReceived;
 string botHP = "|MMMMMMMMMMMMMMM|";
+string botMP = "|MMMMMMMMMMMMMMM|";
 
 int main()
 {
 	system("cls");
 	cout << "\t\t\t\t   " << topHP << "\n";
         cout << "\t\t\t\tHP:" << botHP << "\n";
+	cout << "\t\t\t\t   " << topMP << "\n";
+	cout << "\t\t\t\tMP:" << botMP << "\n";
 	cout << "\t\t\t\t" << gameMessage;
-	cout << "\n\n\n\n\n";
+	cout << "\n\n\n";
 
 	drawChar();
         drawFloor();
@@ -88,11 +92,19 @@ void setRemainingHP()
 		botHP.append("MMMMMMMMMMMMMMM",remainingHP);
 		botHP.append("_______________",15-remainingHP);
 		if (remainingHP < 2)
-			gameMessage = "*Warning HP Low";
+			gameMessage = "   *Warning HP Low";
 	}
 	else
 		botHP.append("______DEAD_____");
 	botHP.append("|");
+}
+
+void setRemainingMP()
+{
+	botMP = "|";
+	botMP.append("MMMMMMMMMMMMMMM",remainingMP);
+	botMP.append("_______________",15-remainingMP);
+	botMP.append("|");
 }
 
 void takeDamage(int dmg)
@@ -140,7 +152,6 @@ void setCharDead()
 	gameMessage = "   G A M E   O V E R";
 	damageReceived = 0;
 	inLoop = 0;
-
 }
 
 void angryFace()
@@ -154,20 +165,22 @@ void drawChar()
 	cout << mid_of_char << mid_of_weapon [weaponNumber]<< mid_attack << "\n";
 	cout << bot_of_char << bot_of_weapon [weaponNumber]<< bot_attack << "\n";
 	cout << gnd_of_char << gnd_of_weapon [weaponNumber]<< gnd_attack;
-
 }
 
 void reDraw()
 {
 	system("cls");
         setRemainingHP();
+	setRemainingMP();
 	cout << "\t\t\t\t   " << topHP << "\n";
 	cout << "\t\t\t\tHP:" << botHP << "\n";
+	cout << "\t\t\t\t   " << topMP << "\n";
+	cout << "\t\t\t\tMP:" << botMP << "\n";
 	cout << "\t\t\t\t" << gameMessage;
-	cout << "\n\n";
+	cout << "\n";
 	if (damageReceived > 0)
 		cout << "  " << damageReceived;
-	cout << "\n\n\n";
+	cout << "\n\n";
         drawChar();
         drawFloor();
 	displayMessage();
@@ -316,7 +329,13 @@ void charSpell(char spell)
 				{
 					angryFace();
 					bot_of_char = "(o )=L";
-					wind();
+					if (remainingMP > 0)
+					{
+						remainingMP--;
+						wind();
+					}
+					else
+						gameMessage = "   *Not enough Mana";
 				}
 				else
 				{
@@ -332,7 +351,14 @@ void charSpell(char spell)
 					bot_of_weapon[weaponNumber] = "| ";
 					gnd_of_weapon[weaponNumber] = " | ";
 					bot_of_char = "(  )=o";
-					fireball();
+					if (remainingMP > 1)
+					{
+						remainingMP -= 2;
+						fireball();
+					}
+					else
+						gameMessage = "   *Not enough Mana";
+					
 				}
 				else
 				{
@@ -345,7 +371,13 @@ void charSpell(char spell)
                                         angryFace();									                                        top_of_weapon[weaponNumber] = "     ";						                                        mid_of_weapon[weaponNumber] = "     ";
 					bot_of_weapon[weaponNumber] = "|----";
 					gnd_of_weapon[weaponNumber] = "     ";
-					lightning();
+					if (remainingMP > 2)
+					{
+						remainingMP -= 3;
+						lightning();
+					}
+					else
+						gameMessage = "   *Not enough Mana";
 				}
 				else
 				{
