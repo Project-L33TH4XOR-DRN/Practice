@@ -35,6 +35,8 @@ void takeDamage(int dmg);
 void setCharDead();
 void charSpell(char spell);
 void fireball();
+void moveSpells();
+void deleteFarSpells();
 //---------End Function Declaration-----------
 
 string top_of_char = t;
@@ -50,7 +52,6 @@ string mid_attack;
 string bot_attack;
 string gnd_attack;
 string gameMessage;
-int timeTick = 0;
 int remainingHP = 15;
 int damageReceived;
 string botHP = "|MMMMMMMMMMMMMMM|";
@@ -73,7 +74,7 @@ int main()
 	        charAttack(charCmd);
 		charSpell(charCmd);
 	        reDraw();
-		timeTick++;
+		moveSpells();
         }
 															        return 0;
 }
@@ -131,6 +132,10 @@ void setCharDead()
 	mid_of_weapon[weaponNumber] = "";
 	bot_of_weapon[weaponNumber] = "";
 	gnd_of_weapon[weaponNumber] = "";
+	top_attack = "";
+	mid_attack = "";
+	bot_attack = "";
+	gnd_attack = "";
 	damageReceived = 0;
 	inLoop = 0;
 
@@ -206,8 +211,8 @@ void charAttack(char attack)
 					angryFace();
 					top_of_weapon[weaponNumber] = "   /";
 					mid_of_weapon[weaponNumber] = "  / ";
-					bot_of_weapon[weaponNumber] = "/ ";
-					gnd_of_weapon[weaponNumber] = "/ ";
+					bot_of_weapon[weaponNumber] = "/  ";
+					gnd_of_weapon[weaponNumber] = "/   ";
 					bot_of_char = "(  )=o";
 				}
 				else
@@ -219,10 +224,10 @@ void charAttack(char attack)
 				if (mid_of_weapon[weaponNumber] == " / ")
 				{
 					angryFace();
-					top_of_weapon[weaponNumber] = "   ";
-					mid_of_weapon[weaponNumber] = "   ";
+					top_of_weapon[weaponNumber] = "     ";
+					mid_of_weapon[weaponNumber] = "     ";
 					bot_of_weapon[weaponNumber] = "|----";
-					gnd_of_weapon[weaponNumber] = "   ";
+					gnd_of_weapon[weaponNumber] = "     ";
 				}
 				else
 				{
@@ -244,7 +249,6 @@ void charAttack(char attack)
 				else
 				{
 					resetChar();
-
 				}
 				break;
 		}
@@ -254,8 +258,31 @@ void charAttack(char attack)
 
 void fireball()
 {
-	mid_attack.insert (0, "<_)");
+	top_attack.insert (0, ",,,   ,,,");
+	mid_attack.insert (0, "<_),,,<_)");
+	bot_attack.insert (0, "   <_)   ");
+	gnd_attack.insert (0, "         ");
+	deleteFarSpells();
+}
 
+void moveSpells()
+{
+	top_attack.insert (0, "  ");
+	mid_attack.insert (0, "  ");
+	bot_attack.insert (0, "  ");
+	gnd_attack.insert (0, "  ");
+	deleteFarSpells();
+}
+
+void deleteFarSpells()
+{
+	if (top_attack.length() > 40)
+	{
+		top_attack.erase (40, top_attack.length()-40);
+                mid_attack.erase (40, mid_attack.length()-40);
+                bot_attack.erase (40, bot_attack.length()-40);
+                gnd_attack.erase (40, gnd_attack.length()-40);
+        }
 }
 
 void charSpell(char spell)
@@ -276,6 +303,10 @@ void charSpell(char spell)
 					gnd_of_weapon[weaponNumber] = " | ";
 					bot_of_char = "(  )=o";
 					fireball();
+				}
+				else
+				{
+					resetChar();
 				}
 				break;
 			case 2:
