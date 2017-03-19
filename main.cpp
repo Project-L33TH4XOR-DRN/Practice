@@ -137,6 +137,7 @@ void setCharDead()
 	mid_attack = "";
 	bot_attack = "";
 	gnd_attack = "";
+	gameMessage = "   G A M E   O V E R";
 	damageReceived = 0;
 	inLoop = 0;
 
@@ -241,7 +242,7 @@ void charAttack(char attack)
 					angryFace();
 					top_of_weapon[weaponNumber] = " \\ /";
 					mid_of_weapon[weaponNumber] = "  X_";
-					bot_of_weapon[weaponNumber] = "/   ";
+					bot_of_weapon[weaponNumber] = "/  ";
 					gnd_of_weapon[weaponNumber] = "/   ";
 					bot_of_char = "(  )=o";
 					damageReceived = 2;
