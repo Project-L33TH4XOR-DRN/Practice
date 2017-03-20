@@ -5,7 +5,6 @@
 #include <unistd.h>
 using namespace std;
 
-
 const int maxWeaponNumber = 4;
 const string t = "_()_";
 const string m = "( \")";
@@ -17,6 +16,7 @@ const string bw[] = {"", "|  ", "\\  ", "| "};
 const string gw[] = {"", "|", "", "|"};
 const string topHP = " _______________ "; 			// 15x_
 const string topMP = " _______________ ";
+const string inventory[] = {" _Inventory_ ","|     |     |","|_____|_____|","|     |     |","|_____|_____|"};
 
 int inLoop = 1;
 int width = 50;
@@ -34,6 +34,7 @@ int remainingMP = 15;
 int damageReceived;
 string botHP = "|MMMMMMMMMMMMMMM|";
 string botMP = "|MMMMMMMMMMMMMMM|";
+string displayInventory[5] = {"\t     ","\t     ","\t     ","\t     ","\t     "};
 
 //----------Function Declaration--------------
 void drawChar();
@@ -53,6 +54,7 @@ void lightning ();
 void moveSpells();
 void deleteFarSpells();
 void moveCharacter(char movement);
+void charInventory(char invent);
 //---------End Function Declaration-----------
 
 
@@ -60,13 +62,12 @@ void moveCharacter(char movement);
 int main()
 {
 	system("cls");
-	cout << "\t\t\t\t   " << topHP << "\n";
-	cout << "\t\t\t\tHP:" << botHP << "\n";
-	cout << "\t\t\t\t   " << topMP << "\n";
-	cout << "\t\t\t\tMP:" << botMP << "\n";
-	cout << "\t\t\t\t" << gameMessage;
+	cout << "\t\t" << displayInventory[0] << "\t   " << topHP << "\n";
+	cout << "\t\t" << displayInventory[1] << "\tHP:" << botHP << "\n";
+	cout << "\t\t" << displayInventory[2] << "\t   " << topMP << "\n";
+	cout << "\t\t" << displayInventory[3] << "\tMP:" << botMP << "\n";
+	cout << "\t\t" << displayInventory[4] << gameMessage;
 	cout << "\n\n\n";
-
 	drawChar();
 	drawFloor();
 	displayMessage();
@@ -77,6 +78,7 @@ int main()
 		moveCharacter(charCmd);
 		charAttack(charCmd);
 		charSpell(charCmd);
+		charInventory(charCmd);
 		reDraw();
 		moveSpells();
         }
@@ -152,8 +154,6 @@ void moveCharacter(char movement)
 	}
 }
 
-
-
 void drawFloor()
 {
 	for (int i = 0; i < width - (charFeetLength + xCoord); i++)
@@ -207,11 +207,11 @@ void reDraw()
 	system("cls");
     setRemainingHP();
 	setRemainingMP();
-	cout << "\t\t\t\t   " << topHP << "\n";
-	cout << "\t\t\t\tHP:" << botHP << "\n";
-	cout << "\t\t\t\t   " << topMP << "\n";
-	cout << "\t\t\t\tMP:" << botMP << "\n";
-	cout << "\t\t\t\t" << gameMessage;
+	cout << "\t\t" << displayInventory[0] << "\t   " << topHP << "\n";
+	cout << "\t\t" << displayInventory[1] << "\tHP:" << botHP << "\n";
+	cout << "\t\t" << displayInventory[2] << "\t   " << topMP << "\n";
+	cout << "\t\t" << displayInventory[3] << "\tMP:" << botMP << "\n";
+	cout << "\t\t" << displayInventory[4] << gameMessage;
 	cout << "\n";
 	if (damageReceived > 0)
 		cout << "  " << damageReceived;
@@ -442,6 +442,31 @@ void setWeapon(char type)
 			inLoop = 0;
 			break;
 	
+		default:
+			break;
+	}
+}
+
+void charInventory (char invent)
+{
+	switch(invent)
+	{
+		case 'i':
+			if (displayInventory[0] == "\t     ")
+				for (int i = 0; i < 5; i++)
+					displayInventory[i] = inventory[i];
+			else
+				for (int i = 0; i < 5; i++)
+					displayInventory[i] = "\t     ";
+			break;
+		case 'y':
+			break;
+		case 'u':
+			break;
+		case 'h':
+			break;
+		case 'j':
+			break;
 		default:
 			break;
 	}
