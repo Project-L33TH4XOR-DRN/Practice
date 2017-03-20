@@ -467,5 +467,4 @@ void setWeapon(char type)
 		default:
 			break;
 	}
-
 }
