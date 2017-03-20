@@ -61,23 +61,23 @@ int main()
 {
 	system("cls");
 	cout << "\t\t\t\t   " << topHP << "\n";
-    cout << "\t\t\t\tHP:" << botHP << "\n";
+	cout << "\t\t\t\tHP:" << botHP << "\n";
 	cout << "\t\t\t\t   " << topMP << "\n";
 	cout << "\t\t\t\tMP:" << botMP << "\n";
 	cout << "\t\t\t\t" << gameMessage;
 	cout << "\n\n\n";
 
 	drawChar();
-    drawFloor();
+	drawFloor();
 	displayMessage();
 	while (inLoop == 1)
 	{
-	    charCmd = getch();
-	    setWeapon(charCmd);
-	    moveCharacter(charCmd);
-	    charAttack(charCmd);
+		charCmd = getch();
+		setWeapon(charCmd);
+		moveCharacter(charCmd);
+		charAttack(charCmd);
 		charSpell(charCmd);
-	    reDraw();
+		reDraw();
 		moveSpells();
         }
 															        return 0;
@@ -120,10 +120,7 @@ void takeDamage(int dmg)
 
 void displayMessage()
 {
-	cout << "a or d to move" << endl;
-	cout << "z to attack, x to cast spell" << endl; 
-	cout << "e or r to change weapon" << endl;
-	cout << "q to quit" << endl;
+	cout << "use: a, d, e, r, z, x, q\n" << endl;
 }
 
 void moveCharacter(char movement)
@@ -136,17 +133,7 @@ void moveCharacter(char movement)
 			if ( i < 3)
 				cout << spaceBeforeMC[i].insert(0," ");
 			else
-			{
 				spaceBeforeMC[3].insert(0,"_");
-						//	cout << mainCharacter[3];
-			}
-		//			for (int i = xCoord + 6; i < width; i++)
-		//				cout << "_";
-		//			cout << endl;
-		//			
-		//			for (int j = 0; j < width; j++)
-		//				cout << "|";
-		//			cout << endl << endl;
 	}
 	else if (movement == 'a'|| movement == 'A')
 	{
@@ -161,15 +148,6 @@ void moveCharacter(char movement)
 				else
 					spaceBeforeMC[3].erase(xCoord,1);
 			}
-		//						cout << mainCharacter[3];
-		//	
-		//				for (int i = xCoord + 6; i < width; i++)
-		//					cout << "_";
-		//				cout << endl;
-		//				
-		//				for (int j = 0; j < width; j++)
-		//					cout << "|";
-		//				cout << endl << endl;
 		}
 	}
 }
