@@ -19,6 +19,10 @@ const string topMP = " _______________ ";
 const string emptySlotInv[] = {"     ", "_____"};
 const string smallPotion[] = {"  X  ","_(_)_"};
 
+const string mt = "  W  ";
+const string mm = " <\" )";
+const string mb = "3( 3)";
+
 int inLoop = 1;
 int width = 50;
 char charCmd;
@@ -46,6 +50,7 @@ string inventorySlot[4][2] =
 	{"     ","     "},
 	{"_____","_____"}
 };
+string ratMob[3] = {mt, mm, mb};
 
 //----------Function Declaration--------------
 void drawChar();
@@ -244,9 +249,9 @@ void drawChar()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		cout << spaceBeforeMC[i] << mainCharacter[i] << charWeapon[i][weaponNumber] << attackAnimation[i];
+		cout << spaceBeforeMC[i] << mainCharacter[i] << charWeapon[i][weaponNumber] << attackAnimation[i]; 
 		if (i != 3)
-			cout << "\n";
+			cout << "\t\t" << ratMob[i] << "\n";
 	}	
 }
 
@@ -264,7 +269,12 @@ void reDraw()
 	cout << "\t\t" << inventory[4] << gameMessage;
 	cout << "\n";
 	if (damageReceived > 0)
-		cout << "  " << damageReceived;
+	{
+		cout << " ";
+		for (int i = 0; i <= xCoord; i++)
+			cout << " ";
+		cout << damageReceived;
+	}
 	cout << "\n\n";
     drawChar();
     drawFloor();
