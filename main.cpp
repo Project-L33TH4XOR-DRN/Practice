@@ -16,7 +16,7 @@ const string bw[] = {"", "|  ", "\\  ", "| "};
 const string gw[] = {"", "|", "", "|"};
 const string topHP = " _______________ "; 			// 15x_
 const string topMP = " _______________ ";
-const string inventory[] = {" _Inventory_ ","|     |     |","|_____|_____|","|     |     |","|_____|_____|"};
+const string potion[] = {" X ","(_)"};
 
 int inLoop = 1;
 int width = 50;
@@ -34,7 +34,15 @@ int remainingMP = 15;
 int damageReceived;
 string botHP = "|MMMMMMMMMMMMMMM|";
 string botMP = "|MMMMMMMMMMMMMMM|";
-string displayInventory[5] = {"\t     ","\t     ","\t     ","\t     ","\t     "};
+bool inventoryOpen = false;
+string inventory[5] = {"\t     ", "\t     ", "\t     ", "\t     ", "\t     "};
+string inventorySlot[4][2] = 
+{
+	{"     ","     "},
+	{"_____","_____"},
+	{"     ","     "},
+	{"_____","_____"}
+};
 
 //----------Function Declaration--------------
 void drawChar();
@@ -55,6 +63,7 @@ void moveSpells();
 void deleteFarSpells();
 void moveCharacter(char movement);
 void charInventory(char invent);
+void displayInventory();
 //---------End Function Declaration-----------
 
 
@@ -62,11 +71,11 @@ void charInventory(char invent);
 int main()
 {
 	system("cls");
-	cout << "\t\t" << displayInventory[0] << "\t   " << topHP << "\n";
-	cout << "\t\t" << displayInventory[1] << "\tHP:" << botHP << "\n";
-	cout << "\t\t" << displayInventory[2] << "\t   " << topMP << "\n";
-	cout << "\t\t" << displayInventory[3] << "\tMP:" << botMP << "\n";
-	cout << "\t\t" << displayInventory[4] << gameMessage;
+	cout << "\t\t" << inventory[0] << "\t   " << topHP << "\n";
+	cout << "\t\t" << inventory[1] << "\tHP:" << botHP << "\n";
+	cout << "\t\t" << inventory[2] << "\t   " << topMP << "\n";
+	cout << "\t\t" << inventory[3] << "\tMP:" << botMP << "\n";
+	cout << "\t\t" << inventory[4] << gameMessage;
 	cout << "\n\n\n";
 	drawChar();
 	drawFloor();
@@ -74,15 +83,41 @@ int main()
 	while (inLoop == 1)
 	{
 		charCmd = getch();
-		setWeapon(charCmd);
-		moveCharacter(charCmd);
-		charAttack(charCmd);
-		charSpell(charCmd);
-		charInventory(charCmd);
+		switch (charCmd)
+		{
+			case 'e':
+			case 'E':
+			case 'r':
+			case 'R':
+			case 'q':
+			case 'Q':
+				setWeapon(charCmd);
+				break;
+			case 'a':
+			case 'A':
+			case 'd':
+			case 'D':
+				moveCharacter(charCmd);
+				break;
+			case 'z':
+			case 'Z':
+				charAttack(charCmd);
+				break;
+			case 'x':
+			case 'X':
+				charSpell(charCmd);
+				break;
+			case 'i':
+			case 'I':
+				charInventory(charCmd);
+				break;
+			default:
+				break;
+		}
 		reDraw();
 		moveSpells();
-        }
-															        return 0;
+    }
+    return 0;
 }
 //----------------End Main------------------------
 
@@ -122,7 +157,7 @@ void takeDamage(int dmg)
 
 void displayMessage()
 {
-	cout << "use: a, d, e, r, z, x, q\n" << endl;
+	cout << "use: a, d, e, r, z, x, i, q\n" << endl;
 }
 
 void moveCharacter(char movement)
@@ -179,7 +214,7 @@ void setCharDead()
 	charWeapon[1][weaponNumber] = "";
 	charWeapon[2][weaponNumber] = "";
 	charWeapon[3][weaponNumber] = "";
-	gameMessage = "   G A M E   O V E R";
+	gameMessage = "\t   G A M E   O V E R";
 	charFeetLength = mainCharacter[3].length();
 	for (int i = 0; i < 4; i++)
 		attackAnimation[i] = "";
@@ -207,11 +242,11 @@ void reDraw()
 	system("cls");
     setRemainingHP();
 	setRemainingMP();
-	cout << "\t\t" << displayInventory[0] << "\t   " << topHP << "\n";
-	cout << "\t\t" << displayInventory[1] << "\tHP:" << botHP << "\n";
-	cout << "\t\t" << displayInventory[2] << "\t   " << topMP << "\n";
-	cout << "\t\t" << displayInventory[3] << "\tMP:" << botMP << "\n";
-	cout << "\t\t" << displayInventory[4] << gameMessage;
+	cout << "\t\t" << inventory[0] << "\t   " << topHP << "\n";
+	cout << "\t\t" << inventory[1] << "\tHP:" << botHP << "\n";
+	cout << "\t\t" << inventory[2] << "\t   " << topMP << "\n";
+	cout << "\t\t" << inventory[3] << "\tMP:" << botMP << "\n";
+	cout << "\t\t" << inventory[4] << gameMessage;
 	cout << "\n";
 	if (damageReceived > 0)
 		cout << "  " << damageReceived;
@@ -452,12 +487,17 @@ void charInventory (char invent)
 	switch(invent)
 	{
 		case 'i':
-			if (displayInventory[0] == "\t     ")
-				for (int i = 0; i < 5; i++)
-					displayInventory[i] = inventory[i];
+			if (!inventoryOpen)
+			{
+				displayInventory();
+				inventoryOpen = true;
+			}
 			else
+			{
 				for (int i = 0; i < 5; i++)
-					displayInventory[i] = "\t     ";
+					inventory[i] = "\t     ";
+				inventoryOpen = false;
+			}
 			break;
 		case 'y':
 			break;
@@ -471,3 +511,17 @@ void charInventory (char invent)
 			break;
 	}
 }
+
+void displayInventory()
+{
+	inventory[0] = " _Inventory_ ";
+	for (int i = 0; i < 4; i++)
+			inventory[i+1] = "|" + inventorySlot[i][0] + "|" + inventorySlot[i][1] + "|";
+}
+
+/*void addPotToInvent()
+{
+	for (int i = 1; i < 6; i++)
+		if (inventory[i] != 
+
+}*/
