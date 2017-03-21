@@ -16,7 +16,8 @@ const string bw[] = {"", "|  ", "\\  ", "| "};
 const string gw[] = {"", "|", "", "|"};
 const string topHP = " _______________ "; 			// 15x_
 const string topMP = " _______________ ";
-const string potion[] = {" X ","(_)"};
+const string emptySlotInv[] = {"     ", "_____"};
+const string smallPotion[] = {"  X  ","_(_)_"};
 
 int inLoop = 1;
 int width = 50;
@@ -32,8 +33,10 @@ int charFeetLength = mainCharacter[3].length();
 int remainingHP = 15;
 int remainingMP = 15;
 int damageReceived;
+bool itemsInPossession[4] = {false, false, false, false};
 string botHP = "|MMMMMMMMMMMMMMM|";
 string botMP = "|MMMMMMMMMMMMMMM|";
+bool attacking = false;
 bool inventoryOpen = false;
 string inventory[5] = {"\t     ", "\t     ", "\t     ", "\t     ", "\t     "};
 string inventorySlot[4][2] = 
@@ -64,6 +67,7 @@ void deleteFarSpells();
 void moveCharacter(char movement);
 void charInventory(char invent);
 void displayInventory();
+void addSmallPot();
 //---------End Function Declaration-----------
 
 
@@ -109,6 +113,14 @@ int main()
 				break;
 			case 'i':
 			case 'I':
+			case 'y':
+			case 'Y':
+			case 'u':
+			case 'U':
+			case 'h':
+			case 'H':
+			case 'j':
+			case 'J':
 				charInventory(charCmd);
 				break;
 			default:
@@ -187,6 +199,7 @@ void moveCharacter(char movement)
 			}
 		}
 	}
+	attacking = false;
 }
 
 void drawFloor()
@@ -242,6 +255,8 @@ void reDraw()
 	system("cls");
     setRemainingHP();
 	setRemainingMP();
+	if (inventoryOpen)
+		displayInventory();
 	cout << "\t\t" << inventory[0] << "\t   " << topHP << "\n";
 	cout << "\t\t" << inventory[1] << "\tHP:" << botHP << "\n";
 	cout << "\t\t" << inventory[2] << "\t   " << topMP << "\n";
@@ -279,17 +294,21 @@ void charAttack(char attack)
 		switch (weaponNumber)
 		{
 			case 0:
-				if (mainCharacter[2] == "(o )o")
+				if (!attacking)
 				{
 					angryFace();
 					mainCharacter[2] = "(o )=o";
+					attacking = true;
 				}
 				else
+				{
 					resetChar();
+					attacking = false;
+				}
 		//		how to use wait function?
 				break;
 			case 1:
-				if (charWeapon[1][weaponNumber] == " |  ")
+				if (!attacking)
 				{
 					angryFace();
 					charWeapon[0][weaponNumber] = "  | ";
@@ -297,24 +316,32 @@ void charAttack(char attack)
 					charWeapon[2][weaponNumber] = "| ";
 					charWeapon[3][weaponNumber] = " |";
 					mainCharacter[2] = "(  )=o";
+					attacking = true;
 				}
 				else
+				{
 					resetChar();
+					attacking = false;
+				}
 				break;
 			case 2:
-				if (charWeapon[1][weaponNumber] == "  / ")
+				if (!attacking)
 				{
 					angryFace();
 					charWeapon[0][weaponNumber] = "     ";
 					charWeapon[1][weaponNumber] = "     ";
 					charWeapon[2][weaponNumber] = "|----";
 					charWeapon[3][weaponNumber] = "";
+					attacking = true;
 				}
 				else
+				{
 					resetChar();
+					attacking = false;
+				}
 				break;
 			case 3:
-				if (charWeapon[1][weaponNumber] == " Y ")
+				if (!attacking)
 				{
 					angryFace();
 					charWeapon[0][weaponNumber] = "  \\ /";
@@ -324,9 +351,13 @@ void charAttack(char attack)
 					mainCharacter[2] = "(  )=o";
 					damageReceived = 2;
 					takeDamage(damageReceived);
+					attacking = true;
 				}
 				else
+				{
 					resetChar();
+					attacking = false;
+				}
 				break;
 		}
 
@@ -386,7 +417,7 @@ void charSpell(char spell)
 		switch (weaponNumber)
 		{
 			case 0:
-				if (mainCharacter[2] == "(o )o")
+				if (!attacking)
 				{
 					angryFace();
 					mainCharacter[2] = "(o )=L";
@@ -397,12 +428,16 @@ void charSpell(char spell)
 					}
 					else
 						gameMessage = "   *Not enough Mana";
+					attacking = true;
 				}
 				else
+				{
 					resetChar();
+					attacking = false;
+				}
 				break;
 			case 1:
-				if (charWeapon[1][weaponNumber] == " |  ")
+				if (!attacking)
 				{
 					angryFace();
 					charWeapon[0][weaponNumber] = "  | ";
@@ -417,13 +452,16 @@ void charSpell(char spell)
 					}
 					else
 						gameMessage = "   *Not enough Mana";
-					
+					attacking = true;
 				}
 				else
+				{
 					resetChar();
+					attacking = false;
+				}
 				break;
 			case 2:
-				if (charWeapon[1][weaponNumber] == "  / ")
+				if (!attacking)
 				{
                     angryFace();
                     charWeapon[0][weaponNumber] = "     ";						                                        
@@ -437,11 +475,16 @@ void charSpell(char spell)
 					}
 					else
 						gameMessage = "   *Not enough Mana";
+					attacking = true;
 				}
 				else
-				        resetChar();
+				{
+				    resetChar();
+				    attacking = false;
+				}
 				break;
 			case 3:
+				addSmallPot();
 				break;
 		}
 	}
@@ -500,12 +543,40 @@ void charInventory (char invent)
 			}
 			break;
 		case 'y':
+			if (itemsInPossession[0] && remainingHP < 15)
+			{
+				itemsInPossession[0] = false;
+				inventorySlot[0][0] = emptySlotInv[0];
+				inventorySlot[1][0] = emptySlotInv[1];
+				remainingHP++;
+			}
 			break;
 		case 'u':
+			if (itemsInPossession[1] && remainingHP < 15)
+			{
+				itemsInPossession[1] = false;
+				inventorySlot[0][1] = emptySlotInv[0];
+				inventorySlot[1][1] = emptySlotInv[1];
+				remainingHP++;
+			}
 			break;
 		case 'h':
+			if (itemsInPossession[2] && remainingHP < 15)
+			{
+				itemsInPossession[2] = false;
+				inventorySlot[2][0] = emptySlotInv[0];
+				inventorySlot[3][0] = emptySlotInv[1];
+				remainingHP++;
+			}
 			break;
 		case 'j':
+			if (itemsInPossession[3] && remainingHP < 15)
+			{
+				itemsInPossession[3] = false;
+				inventorySlot[2][1] = emptySlotInv[0];
+				inventorySlot[3][1] = emptySlotInv[1];
+				remainingHP++;
+			}
 			break;
 		default:
 			break;
@@ -519,9 +590,27 @@ void displayInventory()
 			inventory[i+1] = "|" + inventorySlot[i][0] + "|" + inventorySlot[i][1] + "|";
 }
 
-/*void addPotToInvent()
+void addSmallPot()
 {
-	for (int i = 1; i < 6; i++)
-		if (inventory[i] != 
+	for (int i = 0; i < 4; i++)
+	{
+		if (!itemsInPossession[i])
+		{
+			if (i % 2 == 0)
+			{
+				inventorySlot[i][0] = smallPotion[0];
+				inventorySlot[i+1][0] = smallPotion[1];
+				itemsInPossession[i] = true;
+				break;
+			}
+			else
+			{
+				inventorySlot[i-1][1] = smallPotion[0];
+				inventorySlot[i][1] = smallPotion[1];
+				itemsInPossession[i] = true;
+				break;
+			}
+		}
+	}
+}
 
-}*/
