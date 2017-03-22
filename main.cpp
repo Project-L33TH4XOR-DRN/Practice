@@ -6,18 +6,19 @@
 using namespace std;
 
 const int maxWeaponNumber = 4;
-const string t = "_()_";
-const string m = "( \")";
+const string t = "_()_ ";
+const string m = "( \") ";
 const string b = "(o )o";
 const string g = "(_)_)";
-const string tw[] = {"", " |  ", "   /", "\\|/"};
-const string mw[] = {"", " |  ", "  / ", " Y "};
-const string bw[] = {"", "|  ", "\\  ", "| "};
-const string gw[] = {"", "|", "", "|"};
+const string tw[] = {"", "|  ", "  /", "\\|/"};
+const string mw[] = {"", "|  ", " / ", " Y "};
+const string bw[] = {"", "|  ", "\\  ", " | "};
+const string gw[] = {"", "|", "", " |"};
 const string topHP = " _______________ "; 			// 15x_
 const string topMP = " _______________ ";
 const string emptySlotInv[] = {"     ", "_____"};
 const string smallPotion[] = {"  X  ","_(_)_"};
+const string smallManaPotion[] = {"  X  ", "_(M)_"};
 
 const string mt = "  W  ";
 const string mm = " <\" )";
@@ -30,14 +31,14 @@ int weaponNumber = 0;
 int xCoord = 0;
 string mainCharacter[4] = {t,m,b,g};
 string charWeapon[4][maxWeaponNumber] = {tw,mw,bw,gw};
-string attackAnimation[4];
+string attackAnimation[4] = {"     ", "     ", "     ",""};
 string gameMessage;
 string spaceBeforeMC[4];
 int charFeetLength = mainCharacter[3].length();
 int remainingHP = 15;
 int remainingMP = 15;
 int damageReceived;
-bool itemsInPossession[4] = {false, false, false, false};
+string itemsInPossession[4] = {"none", "none", "none", "none"};
 string botHP = "|MMMMMMMMMMMMMMM|";
 string botMP = "|MMMMMMMMMMMMMMM|";
 bool attacking = false;
@@ -73,6 +74,9 @@ void moveCharacter(char movement);
 void charInventory(char invent);
 void displayInventory();
 void addSmallPot();
+void addSmallManaPot();
+void usePotion(int slot);
+void moveMobs();
 //---------End Function Declaration-----------
 
 
@@ -126,6 +130,10 @@ int main()
 			case 'H':
 			case 'j':
 			case 'J':
+			case 'm':
+			case 'M':
+			case 'n':
+			case 'N':
 				charInventory(charCmd);
 				break;
 			default:
@@ -133,6 +141,7 @@ int main()
 		}
 		reDraw();
 		moveSpells();
+		moveMobs();
     }
     return 0;
 }
@@ -224,7 +233,7 @@ void critter()
 
 void setCharDead()
 {
-	mainCharacter[0] = "     GG";
+	mainCharacter[0] = "     GG      ";
 	mainCharacter[1] = "            ~";
 	mainCharacter[2] = "         _()_";
 	mainCharacter[3] = "(_)_)( o)(XX)";
@@ -251,7 +260,7 @@ void drawChar()
 	{
 		cout << spaceBeforeMC[i] << mainCharacter[i] << charWeapon[i][weaponNumber] << attackAnimation[i]; 
 		if (i != 3)
-			cout << "\t\t" << ratMob[i] << "\n";
+			cout << ratMob[i] << "\n";
 	}	
 }
 
@@ -267,6 +276,7 @@ void reDraw()
 	cout << "\t\t" << inventory[2] << "\t   " << topMP << "\n";
 	cout << "\t\t" << inventory[3] << "\tMP:" << botMP << "\n";
 	cout << "\t\t" << inventory[4] << gameMessage;
+	gameMessage = "";
 	cout << "\n";
 	if (damageReceived > 0)
 	{
@@ -321,7 +331,7 @@ void charAttack(char attack)
 				if (!attacking)
 				{
 					angryFace();
-					charWeapon[0][weaponNumber] = "  | ";
+					charWeapon[0][weaponNumber] = " | ";
 					charWeapon[1][weaponNumber] = " | ";
 					charWeapon[2][weaponNumber] = "| ";
 					charWeapon[3][weaponNumber] = " |";
@@ -354,7 +364,7 @@ void charAttack(char attack)
 				if (!attacking)
 				{
 					angryFace();
-					charWeapon[0][weaponNumber] = "  \\ /";
+					charWeapon[0][weaponNumber] = " \\ /";
 					charWeapon[1][weaponNumber] = "  X_";
 					charWeapon[2][weaponNumber] = "/  ";
 					charWeapon[3][weaponNumber] = "/";
@@ -413,10 +423,10 @@ void moveSpells()
 
 void deleteFarSpells()
 {
-	if (attackAnimation[0].length() > 40)
+	if (attackAnimation[0].length() > 30)
 	{
 		for (int i = 0; i < 3; i++)
-			attackAnimation[i].erase (40, attackAnimation[i].length()-40);
+			attackAnimation[i].erase (30, attackAnimation[i].length()-30);
         }
 }
 
@@ -450,7 +460,7 @@ void charSpell(char spell)
 				if (!attacking)
 				{
 					angryFace();
-					charWeapon[0][weaponNumber] = "  | ";
+					charWeapon[0][weaponNumber] = " | ";
 					charWeapon[1][weaponNumber] = " | ";
 					charWeapon[2][weaponNumber] = "| ";
 					charWeapon[3][weaponNumber] = " |";
@@ -494,7 +504,6 @@ void charSpell(char spell)
 				}
 				break;
 			case 3:
-				addSmallPot();
 				break;
 		}
 	}
@@ -540,6 +549,7 @@ void charInventory (char invent)
 	switch(invent)
 	{
 		case 'i':
+		case 'I':
 			if (!inventoryOpen)
 			{
 				displayInventory();
@@ -553,46 +563,54 @@ void charInventory (char invent)
 			}
 			break;
 		case 'y':
-			if (itemsInPossession[0] && remainingHP < 15)
-			{
-				itemsInPossession[0] = false;
-				inventorySlot[0][0] = emptySlotInv[0];
-				inventorySlot[1][0] = emptySlotInv[1];
-				remainingHP++;
-			}
+		case 'Y':
+			usePotion(0);
+			inventorySlot[0][0] = emptySlotInv[0];
+			inventorySlot[1][0] = emptySlotInv[1];
 			break;
 		case 'u':
-			if (itemsInPossession[1] && remainingHP < 15)
-			{
-				itemsInPossession[1] = false;
-				inventorySlot[0][1] = emptySlotInv[0];
-				inventorySlot[1][1] = emptySlotInv[1];
-				remainingHP++;
-			}
+		case 'U':
+			usePotion(1);
+			inventorySlot[0][1] = emptySlotInv[0];
+			inventorySlot[1][1] = emptySlotInv[1];
 			break;
 		case 'h':
-			if (itemsInPossession[2] && remainingHP < 15)
-			{
-				itemsInPossession[2] = false;
-				inventorySlot[2][0] = emptySlotInv[0];
-				inventorySlot[3][0] = emptySlotInv[1];
-				remainingHP++;
-			}
+		case 'H':
+			usePotion(2);
+			inventorySlot[2][0] = emptySlotInv[0];
+			inventorySlot[3][0] = emptySlotInv[1];
 			break;
 		case 'j':
-			if (itemsInPossession[3] && remainingHP < 15)
-			{
-				itemsInPossession[3] = false;
-				inventorySlot[2][1] = emptySlotInv[0];
-				inventorySlot[3][1] = emptySlotInv[1];
-				remainingHP++;
-			}
+		case 'J':
+			usePotion(3);
+			inventorySlot[2][1] = emptySlotInv[0];
+			inventorySlot[3][1] = emptySlotInv[1];
+			break;
+		case 'm':
+		case 'M':
+			addSmallManaPot();
+			break;
+		case 'n':
+		case 'N':
+			addSmallPot();
 			break;
 		default:
 			break;
 	}
 }
 
+
+void usePotion(int slot)
+{
+	if (itemsInPossession[slot] != "none")
+			{
+				if (itemsInPossession[slot] == "hp" && remainingHP < 15)
+					remainingHP++;
+				else if (itemsInPossession[slot] == "mp" && remainingMP < 15)
+					remainingMP++;
+				itemsInPossession[slot] = "none";
+			}
+}
 void displayInventory()
 {
 	inventory[0] = " _Inventory_ ";
@@ -604,23 +622,60 @@ void addSmallPot()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (!itemsInPossession[i])
+		if (itemsInPossession[i] == "none")
 		{
 			if (i % 2 == 0)
 			{
 				inventorySlot[i][0] = smallPotion[0];
 				inventorySlot[i+1][0] = smallPotion[1];
-				itemsInPossession[i] = true;
+				itemsInPossession[i] = "hp";
+				gameMessage = "\tAcquired HP Potion!";
 				break;
 			}
 			else
 			{
 				inventorySlot[i-1][1] = smallPotion[0];
 				inventorySlot[i][1] = smallPotion[1];
-				itemsInPossession[i] = true;
+				itemsInPossession[i] = "hp";
+				gameMessage = "\tAcquired HP Potion!";
 				break;
 			}
 		}
 	}
 }
 
+void addSmallManaPot()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (itemsInPossession[i] == "none")
+		{
+			if (i % 2 == 0)
+			{
+				inventorySlot[i][0] = smallManaPotion[0];
+				inventorySlot[i+1][0] = smallManaPotion[1];
+				itemsInPossession[i] = "mp";
+				gameMessage = "\tAcquired MP Potion!";
+				break;
+			}
+			else
+			{
+				inventorySlot[i-1][1] = smallManaPotion[0];
+				inventorySlot[i][1] = smallManaPotion[1];
+				itemsInPossession[i] = "mp";
+				gameMessage = "\tAcquired MP Potion!";
+				break;
+			}
+		}
+	}
+}
+
+void moveMobs()
+{
+	int speedOfMob = 4;
+	if (attackAnimation[1].length() > speedOfMob)
+	{
+		for (int i = 0; i < 3; i++)
+			attackAnimation[i].erase (attackAnimation[i].length()-speedOfMob, attackAnimation[i].length()-speedOfMob);
+	}
+}
